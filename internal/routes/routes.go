@@ -19,5 +19,17 @@ func NoteRoutes(db *sql.DB) {
 			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		}
 	})
+	http.HandleFunc("/notes/", func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodGet:
+			handler.GetNote(db)(w, r)
+		case http.MethodDelete:
+			handler.DeleteNote(db)(w, r)
+		case http.MethodPut:
+			handler.UpdateNote(db)(w, r)
+		default:
+			http.Error(w, "Unsupported HTTP method", http.StatusMethodNotAllowed)
+		}
+	})
 	
 }
